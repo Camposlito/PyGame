@@ -26,7 +26,7 @@ def random_color_hex():
     return rgb_hex(rgb[0],rgb[1],rgb[2])
 
 def reiniciar_jogo():
-    #TODO: não sei pq não aparece a mensagem na tela ;-;
+    #FIXME: não sei pq não aparece a mensagem na tela ;-;
     global fim_de_jogo
     msg_reiniciar = fonte_menor.render("Pressione R para reiniciar", True, (255,255,255))
     #msg_reiniciar_rect = msg_reiniciar.get_rect(center = (400,400))
