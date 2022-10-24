@@ -1,6 +1,7 @@
 import numpy as np
 import pygame
 import random
+from Botao import Botao
 pygame.init()
 fim_de_jogo = False
 
@@ -24,14 +25,9 @@ def rgb_hex(r,g,b):
 def random_color_hex():
     rgb = random_color_rgb()
     return rgb_hex(rgb[0],rgb[1],rgb[2])
-
-def reiniciar_jogo():
-    #FIXME: não sei pq não aparece a mensagem na tela ;-;
-    global fim_de_jogo
-    msg_reiniciar = fonte_menor.render("Pressione R para reiniciar", True, (255,255,255))
-    #msg_reiniciar_rect = msg_reiniciar.get_rect(center = (400,400))
-    janela.blit(msg_reiniciar, (0,0))
-    fim_de_jogo = True
+    
+def msg_reiniciar():
+    janela.blit(fonte_menor.render("Aperte R Para Reiniciar", True, "white"), (250,150))
 
 #Posição e velocidade inicial da bolinha
 x=400
@@ -46,24 +42,6 @@ random.shuffle(resp_cor)
 print(rgb_ans)
 print(hex_ans)
 
-class Botao():
-    def __init__(self, image, x, y, texto_input):
-        self.image = image
-        self.x = x
-        self.y = y
-        self.rect = self.image.get_rect(center=(self.x, self.y))
-        self.texto_input = texto_input
-        self.text = fonte.render(self.texto_input, True, "white")
-        self.text_rect = self.text.get_rect(center=(self.x, self.y))
-
-    def update(self):
-        janela.blit(self.image, self.rect)
-        janela.blit(self.text, self.text_rect)
-
-    def checkForInput(self, position):
-        if position[0] in range(self.rect.left, self.rect.right) and position[1] in range(self.rect.top, self.rect.bottom):
-            return (self.texto_input)
-
 #Tamanho e estilo dos botões
 botao_estilo = pygame.image.load("lib/botao.png")
 botao_estilo = pygame.transform.scale(botao_estilo, (200, 100))
@@ -74,9 +52,9 @@ botao_estilo_acertou = pygame.transform.scale(botao_estilo_acertou, (200, 100))
 botao_estilo_errou = pygame.image.load("lib/botao_errado.png")
 botao_estilo_errou = pygame.transform.scale(botao_estilo_errou, (200, 100))
 
-botao1 = Botao(botao_estilo, 140, 300, "#" + resp_cor[0])
-botao2 = Botao(botao_estilo, 400, 300, "#" + resp_cor[1])
-botao3 = Botao(botao_estilo, 660, 300, "#" + resp_cor[2])
+botao1 = Botao(botao_estilo, 140, 300, "#" + resp_cor[0], janela, fonte)
+botao2 = Botao(botao_estilo, 400, 300, "#" + resp_cor[1], janela, fonte)
+botao3 = Botao(botao_estilo, 660, 300, "#" + resp_cor[2], janela, fonte)
 
 janela_aberta = True
 while janela_aberta :
@@ -89,26 +67,33 @@ while janela_aberta :
             janela_aberta = False
         #Clicar em algum dos botões
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if botao1.checkForInput(pygame.mouse.get_pos()) == ("#" + hex_ans):
-                print("acertou")
-                botao1 = Botao(botao_estilo_acertou, 140, 300, "#" + resp_cor[0])
-                botao2 = Botao(botao_estilo_errou, 400, 300, "#" + resp_cor[1])
-                botao3 = Botao(botao_estilo_errou, 660, 300, "#" + resp_cor[2])
-                reiniciar_jogo()
-            elif botao2.checkForInput(pygame.mouse.get_pos()) == ("#" + hex_ans):
-                print("acertou")
-                botao2 = Botao(botao_estilo_acertou, 400, 300, "#" + resp_cor[1])
-                botao1 = Botao(botao_estilo_errou, 140, 300, "#" + resp_cor[0])
-                botao3 = Botao(botao_estilo_errou, 660, 300, "#" + resp_cor[2])
-                reiniciar_jogo()
-            elif botao3.checkForInput(pygame.mouse.get_pos()) == ("#" + hex_ans):
-                print("acertou")
-                botao3 = Botao(botao_estilo_acertou, 660, 300, "#" + resp_cor[2])
-                botao2 = Botao(botao_estilo_errou, 400, 300, "#" + resp_cor[1])
-                botao1 = Botao(botao_estilo_errou, 140, 300, "#" + resp_cor[0])
-                reiniciar_jogo()
-            else:
+            b1 = botao1.checkForInput(pygame.mouse.get_pos())
+            b2 = botao2.checkForInput(pygame.mouse.get_pos())
+            b3 = botao3.checkForInput(pygame.mouse.get_pos())
+            if b1 != ("#" + hex_ans) and b1 == ("#" + resp_cor[0]):
+                botao1.mudar_estilo(botao_estilo_errou)
+                botao1.update()
                 print("errou")
+            elif b1 == ("#" + hex_ans):
+                botao1.mudar_estilo(botao_estilo_acertou)
+                print("acertou")
+                fim_de_jogo = True
+            elif b2 != ("#" + hex_ans) and b2 == ("#" + resp_cor[1]):
+                botao2.mudar_estilo(botao_estilo_errou)
+                botao2.update()
+                print("errou")
+            elif b2 == ("#" + hex_ans):
+                botao2.mudar_estilo(botao_estilo_acertou)
+                print("acertou")
+                fim_de_jogo = True
+            elif b3 != ("#" + hex_ans) and b3 == ("#" + resp_cor[2]):
+                botao3.mudar_estilo(botao_estilo_errou)
+                botao3.update()
+                print("errou")
+            elif b3 == ("#" + hex_ans):
+                botao3.mudar_estilo(botao_estilo_acertou)
+                print("acertou")
+                fim_de_jogo = True
             
     #teclas de movimento
     comandos= pygame.key.get_pressed()
@@ -120,6 +105,8 @@ while janela_aberta :
         x-=velocidade
     if comandos[pygame.K_RIGHT]:
         x+=velocidade
+    
+    #Reseta as configurações inciais quando apertar R e fim_de_jogo = True
     if comandos[pygame.K_r] and fim_de_jogo:
         #reposiciona a bolinha
         x=400
@@ -130,11 +117,9 @@ while janela_aberta :
         resp_cor = [hex_ans, random_color_hex(), random_color_hex()]
         random.shuffle(resp_cor)
         #redefine os botões
-        botao_estilo = pygame.image.load("lib/botao.png")
-        botao_estilo = pygame.transform.scale(botao_estilo, (200, 100))
-        botao1 = Botao(botao_estilo, 140, 300, "#" + resp_cor[0])
-        botao2 = Botao(botao_estilo, 400, 300, "#" + resp_cor[1])
-        botao3 = Botao(botao_estilo, 660, 300, "#" + resp_cor[2])
+        botao1.reset("#" + resp_cor[0], fonte, botao_estilo)
+        botao2.reset("#" + resp_cor[1], fonte, botao_estilo)
+        botao3.reset("#" + resp_cor[2], fonte, botao_estilo)
         print(rgb_ans)
         print(hex_ans)
         fim_de_jogo = False
@@ -145,6 +130,8 @@ while janela_aberta :
     botao1.update()
     botao2.update()
     botao3.update()
+    if fim_de_jogo:
+        msg_reiniciar()
     #cria a bolinha
     pygame.draw.circle(janela, rgb_ans, (x,y), 100)
     pygame.display.update()
