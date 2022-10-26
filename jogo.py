@@ -65,35 +65,36 @@ while janela_aberta :
         #Clicar em fechar o jogo
         if event.type == pygame.QUIT:
             janela_aberta = False
+        if fim_de_jogo == False:
         #Clicar em algum dos botões
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            b1 = botao1.checkForInput(pygame.mouse.get_pos())
-            b2 = botao2.checkForInput(pygame.mouse.get_pos())
-            b3 = botao3.checkForInput(pygame.mouse.get_pos())
-            if b1 != ("#" + hex_ans) and b1 == ("#" + resp_cor[0]):
-                botao1.mudar_estilo(botao_estilo_errou)
-                botao1.update()
-                print("errou")
-            elif b1 == ("#" + hex_ans):
-                botao1.mudar_estilo(botao_estilo_acertou)
-                print("acertou")
-                fim_de_jogo = True
-            elif b2 != ("#" + hex_ans) and b2 == ("#" + resp_cor[1]):
-                botao2.mudar_estilo(botao_estilo_errou)
-                botao2.update()
-                print("errou")
-            elif b2 == ("#" + hex_ans):
-                botao2.mudar_estilo(botao_estilo_acertou)
-                print("acertou")
-                fim_de_jogo = True
-            elif b3 != ("#" + hex_ans) and b3 == ("#" + resp_cor[2]):
-                botao3.mudar_estilo(botao_estilo_errou)
-                botao3.update()
-                print("errou")
-            elif b3 == ("#" + hex_ans):
-                botao3.mudar_estilo(botao_estilo_acertou)
-                print("acertou")
-                fim_de_jogo = True
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                b1 = botao1.checkForInput(pygame.mouse.get_pos())
+                b2 = botao2.checkForInput(pygame.mouse.get_pos())
+                b3 = botao3.checkForInput(pygame.mouse.get_pos())
+                if b1 != ("#" + hex_ans) and b1 == ("#" + resp_cor[0]):
+                    botao1.mudar_estilo(botao_estilo_errou)
+                    botao1.update()
+                    print("errou")
+                elif b1 == ("#" + hex_ans):
+                    botao1.mudar_estilo(botao_estilo_acertou)
+                    print("acertou")
+                    fim_de_jogo = True
+                elif b2 != ("#" + hex_ans) and b2 == ("#" + resp_cor[1]):
+                    botao2.mudar_estilo(botao_estilo_errou)
+                    botao2.update()
+                    print("errou")
+                elif b2 == ("#" + hex_ans):
+                    botao2.mudar_estilo(botao_estilo_acertou)
+                    print("acertou")
+                    fim_de_jogo = True
+                elif b3 != ("#" + hex_ans) and b3 == ("#" + resp_cor[2]):
+                    botao3.mudar_estilo(botao_estilo_errou)
+                    botao3.update()
+                    print("errou")
+                elif b3 == ("#" + hex_ans):
+                    botao3.mudar_estilo(botao_estilo_acertou)
+                    print("acertou")
+                    fim_de_jogo = True
             
     #teclas de movimento
     comandos= pygame.key.get_pressed()
